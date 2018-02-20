@@ -1,0 +1,190 @@
+﻿<?xml  version="1.0" encoding="utf-8"?>
+<CliParameters xmlns="-//nuix.com/2014/CollectorEngine" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="-//nuix.com/2014/CollectorEngine ./CollectorEngine.xsd">
+	<Titan>
+		<Threads>1</Threads>
+		<RetryCount>2</RetryCount>
+		<TemplatePath>..\Templates\CliStatus.db</TemplatePath>
+		<NistDirectory  UseToEliminateMatches="no"/>
+		<StdDirectory  UseToEliminateMatches="no"/>
+		<DupDirectory  UseToEliminateMatches="no"/>
+		<Signatures>..\Signatures\File Headers.xml</Signatures>
+		<Search  MinWordSize="3" MaxWordSize="32">
+			<AllowableDigits>0123456789</AllowableDigits>
+			<AllowableSpecials>'_-@.</AllowableSpecials>
+			<AllowableChars>ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz</AllowableChars>
+		</Search>
+		<TempFolder  UseDefault="yes"/>
+		<Restart  Mode="IgnorePrevious"/>
+		<ForensicSnapshot  Apply="None"/>
+		<ExaminerName>~INVESTIGATOR~</ExaminerName>
+		<CaseName>~CASENAME~</CaseName>
+		<CollectionType>Local</CollectionType>
+	</Titan>
+	<Input  PreHash="no" CrawlOnly="no">
+		<FileLists PreHash="no" PreserveAccessDate="yes">
+			~FILELIST~
+		</FileLists>
+		<FileSafes/>
+		<LogicalEvidenceFiles/>
+		<MapFiles/>
+		<GhostFiles/>
+	</Input>
+	<SelectionSet>
+		<Owners/>
+		<Extensions  AnalyzeSignatures="no" Mode="Include"/>
+		<Keywords/>
+		<SaveFilesPath  AllowSave="yes">../Sets</SaveFilesPath>
+		<Hashes UseToIncludeMatches="no" HashType="MD5">
+			<DBDirPath>%temp%\Include_Db{DateTime}</DBDirPath>
+		</Hashes>
+	</SelectionSet>
+	<Target  HashOnly="no" CreateFileSafe="no" DoDelete="~DO_DELETE~" DoExtract="~DO_EXTRACT~" InsertInVault="no" PostValidate="yes" SuppressDuplicates="no">
+		<FileSafePath LoginUser="~USERNAME~" Password="~PASSWORD~" LoginDomain="~DOMAIN~" SegmentSizeMagnitude="GB" SegmentSize="2" Compression="None">C:\Nuix Collector\Collection\FileSafe\~BASEFILELISTNAME~</FileSafePath>
+		<Trash  OverwriteCycles="~OVERWRITECOUNT~" ScrambleCreationDates="~SCRAMBLECREATIONDATE~" ScrambleModificationDates="~SCRAMBLEMODIFICATIONDATE~" ScrambleLastAccessDates="~SCRAMBLEACCESSDATE~" ScrambleName="~SCRAMBLENAME~" DeleteFolders="~DELETEFOLDERS~"/>
+		<OriginalLocation>~BASEFILELISTNAME~</OriginalLocation>
+		~EXTRACT_PATH_NODE~
+		~REMEDIATION_NODE~
+	</Target>
+	<Logs UTC-Mode="No" GenerateXML="no" IncludeJobInfo="yes">
+		<Location LoginUser="~USERNAME~" Password="~PASSWORD~" LoginDomain="~DOMAIN~">~OUTPUTLOGDIRECTORY~</Location>
+		<BaseName>~BASEFILELISTNAME~</BaseName>
+		<CollectionReport  name="Collection Log">
+			<OutputDirectory>$\Collection</OutputDirectory>
+			<ReportFileExtension>csv</ReportFileExtension>
+			<CssTemplate>..\Templates\</CssTemplate>
+			<XslTemplate>..\Templates\CollectionReportTsv.xsl</XslTemplate>
+		</CollectionReport>
+		<CollectionReport  name="Collection Report">
+			<OutputDirectory>$\Collection</OutputDirectory>
+			<ReportFileExtension>htm</ReportFileExtension>
+			<CssTemplate>..\Templates\CollectionReport.css</CssTemplate>
+			<XslTemplate>..\Templates\CollectionReportHtml.xsl</XslTemplate>
+		</CollectionReport>
+		<CrawlReport  name="Crawl Log">
+			<OutputDirectory>$\Crawl</OutputDirectory>
+			<ReportFileExtension>csv</ReportFileExtension>
+			<CssTemplate>..\Templates\</CssTemplate>
+			<XslTemplate>..\Templates\CrawlSummaryTsv.xsl</XslTemplate>
+		</CrawlReport>
+		<CrawlReport  name="Crawl Report">
+			<OutputDirectory>$\Crawl</OutputDirectory>
+			<ReportFileExtension>htm</ReportFileExtension>
+			<CssTemplate>..\Templates\CrawlSummary.css</CssTemplate>
+			<XslTemplate>..\Templates\CrawlSummaryHtml.xsl</XslTemplate>
+		</CrawlReport>
+		<DeletionReport  name="Deletion Log">
+			<OutputDirectory>$\Deletion</OutputDirectory>
+			<ReportFileExtension>csv</ReportFileExtension>
+			<CssTemplate>..\Templates\</CssTemplate>
+			<XslTemplate>..\Templates\DeletionReportTsv.xsl</XslTemplate>
+		</DeletionReport>
+		<DeletionReport  name="Deletion Report">
+			<OutputDirectory>$\Deletion</OutputDirectory>
+			<ReportFileExtension>htm</ReportFileExtension>
+			<CssTemplate>..\Templates\DeletionReport.css</CssTemplate>
+			<XslTemplate>..\Templates\DeletionReportHtml.xsl</XslTemplate>
+		</DeletionReport>
+		<DuplicateReport  name="Duplicate Log">
+			<OutputDirectory>$\Duplicate</OutputDirectory>
+			<ReportFileExtension>csv</ReportFileExtension>
+			<CssTemplate>..\Templates\</CssTemplate>
+			<XslTemplate>..\Templates\DuplicateReportTsv.xsl</XslTemplate>
+		</DuplicateReport>
+		<DuplicateReport  name="Duplicate Report">
+			<OutputDirectory>$\Duplicate</OutputDirectory>
+			<ReportFileExtension>htm</ReportFileExtension>
+			<CssTemplate>..\Templates\DuplicateReport.css</CssTemplate>
+			<XslTemplate>..\Templates\DuplicateReportHtml.xsl</XslTemplate>
+		</DuplicateReport>
+		<ErrorReport  name="Error Log">
+			<OutputDirectory>$\Error</OutputDirectory>
+			<ReportFileExtension>csv</ReportFileExtension>
+			<CssTemplate>..\Templates\</CssTemplate>
+			<XslTemplate>..\Templates\ErrorReportTsv.xsl</XslTemplate>
+		</ErrorReport>
+		<ErrorReport  name="Error Report">
+			<OutputDirectory>$\Error</OutputDirectory>
+			<ReportFileExtension>htm</ReportFileExtension>
+			<CssTemplate>..\Templates\ErrorReport.css</CssTemplate>
+			<XslTemplate>..\Templates\ErrorReportHtml.xsl</XslTemplate>
+		</ErrorReport>
+		<NistReport  name="NIST Log">
+			<OutputDirectory>$\NIST</OutputDirectory>
+			<ReportFileExtension>csv</ReportFileExtension>
+			<CssTemplate>..\Templates\</CssTemplate>
+			<XslTemplate>..\Templates\NistReportTsv.xsl</XslTemplate>
+		</NistReport>
+		<NistReport  name="NIST Report">
+			<OutputDirectory>$\NIST</OutputDirectory>
+			<ReportFileExtension>htm</ReportFileExtension>
+			<CssTemplate>..\Templates\NistReport.css</CssTemplate>
+			<XslTemplate>..\Templates\NistReportHtml.xsl</XslTemplate>
+		</NistReport>
+		<NotDeletedReport  name="Not Deleted Log">
+			<OutputDirectory>$\Not Deleted</OutputDirectory>
+			<ReportFileExtension>csv</ReportFileExtension>
+			<CssTemplate>..\Templates\</CssTemplate>
+			<XslTemplate>..\Templates\NotDeletedReportTsv.xsl</XslTemplate>
+		</NotDeletedReport>
+		<NotDeletedReport  name="Not Deleted Report">
+			<OutputDirectory>$\Not Deleted</OutputDirectory>
+			<ReportFileExtension>htm</ReportFileExtension>
+			<CssTemplate>..\Templates\NotDeletedReport.css</CssTemplate>
+			<XslTemplate>..\Templates\NotDeletedReportHtml.xsl</XslTemplate>
+		</NotDeletedReport>
+		<StdReport  name="Standard Files Log">
+			<OutputDirectory>$\Standard Files</OutputDirectory>
+			<ReportFileExtension>csv</ReportFileExtension>
+			<CssTemplate>..\Templates\</CssTemplate>
+			<XslTemplate>..\Templates\StdReportTsv.xsl</XslTemplate>
+		</StdReport>
+		<StdReport  name="Standard Files Report">
+			<OutputDirectory>$\Standard Files</OutputDirectory>
+			<ReportFileExtension>htm</ReportFileExtension>
+			<CssTemplate>..\Templates\StdReport.css</CssTemplate>
+			<XslTemplate>..\Templates\StdReportHtml.xsl</XslTemplate>
+		</StdReport>
+		<SummaryReport  name="Summary Report">
+			<OutputDirectory>$\Summary</OutputDirectory>
+			<ReportFileExtension>htm</ReportFileExtension>
+			<CssTemplate>..\Templates\SummaryReport.css</CssTemplate>
+			<XslTemplate>..\Templates\SummaryReportHTML.xsl</XslTemplate>
+		</SummaryReport>
+		<UncollectedReport  name="Uncollected Log">
+			<OutputDirectory>$\Uncollected</OutputDirectory>
+			<ReportFileExtension>csv</ReportFileExtension>
+			<CssTemplate>..\Templates\</CssTemplate>
+			<XslTemplate>..\Templates\UncollectedReportTsv.xsl</XslTemplate>
+		</UncollectedReport>
+		<UncollectedReport  name="Uncollected Report">
+			<OutputDirectory>$\Uncollected</OutputDirectory>
+			<ReportFileExtension>htm</ReportFileExtension>
+			<CssTemplate>..\Templates\UncollectedReport.css</CssTemplate>
+			<XslTemplate>..\Templates\UncollectedReportHtml.xsl</XslTemplate>
+		</UncollectedReport>
+		<UnresponsiveReport  name="Unresponsive Log">
+			<OutputDirectory>$\Unresponsive</OutputDirectory>
+			<ReportFileExtension>csv</ReportFileExtension>
+			<CssTemplate>..\Templates\</CssTemplate>
+			<XslTemplate>..\Templates\UnresponsiveReportTsv.xsl</XslTemplate>
+		</UnresponsiveReport>
+		<UnresponsiveReport  name="Unresponsive Report">
+			<OutputDirectory>$\Unresponsive</OutputDirectory>
+			<ReportFileExtension>htm</ReportFileExtension>
+			<CssTemplate>..\Templates\UnresponsiveReport.css</CssTemplate>
+			<XslTemplate>..\Templates\UnresponsiveReportHtml.xsl</XslTemplate>
+		</UnresponsiveReport>
+		<WarningReport  name="Warning Log">
+			<OutputDirectory>$\Error</OutputDirectory>
+			<ReportFileExtension>csv</ReportFileExtension>
+			<CssTemplate>..\Templates\</CssTemplate>
+			<XslTemplate>..\Templates\WarningReportTsv.xsl</XslTemplate>
+		</WarningReport>
+		<WarningReport  name="Warning Report">
+			<OutputDirectory>$\Error</OutputDirectory>
+			<ReportFileExtension>htm</ReportFileExtension>
+			<CssTemplate>..\Templates\WarningReport.css</CssTemplate>
+			<XslTemplate>..\Templates\WarningReportHtml.xsl</XslTemplate>
+		</WarningReport>
+	</Logs>
+</CliParameters>
