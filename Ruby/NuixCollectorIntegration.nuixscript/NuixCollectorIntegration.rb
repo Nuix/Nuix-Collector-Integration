@@ -512,9 +512,9 @@ if dialog.getDialogResult == true
 							# Logic to populate text file list
 							entry_pieces = []
 							item_data.each do |key,value|
-								entry_pieces << "#{key}=#{value}"
+								entry_pieces << "#{key}=\"#{value}\""
 							end
-							output_text_file_writer.puts(entry_pieces.join("\n"))
+							output_text_file_writer.puts(entry_pieces.join(" "))
 						else
 							# Xml fragment logic here
 							output_xml_file_writer.add_file_entry(item_data)
