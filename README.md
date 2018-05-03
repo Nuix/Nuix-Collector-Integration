@@ -1,6 +1,10 @@
 ﻿Nuix Collector Integration
 ===============
 
+![Last tested in Nuix 7.4](https://img.shields.io/badge/Nuix-7.4-green.svg)
+
+View the GitHub project [here](https://github.com/Nuix/Nuix-Collector-Integration) or download the latest release [here](https://github.com/Nuix/Nuix-Collector-Integration/releases).
+
 # Overview
 
 This script will generate a Nuix Collector XML job file based on items located in one or more Nuix cases.  The job file created can be used for defensible remediation of the items' source data on disk.  Items are located based on a user provided scope query.  This script can optionally also run remediation through Nuix Collector.
