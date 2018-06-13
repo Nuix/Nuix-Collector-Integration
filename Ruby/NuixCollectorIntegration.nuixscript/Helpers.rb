@@ -41,4 +41,40 @@ class Helpers
 			return strPath
 		end
 	end
+	
+	# Recursive method to return an item's closest physical ancestor
+	# If the item is a physical file, returns item
+	# If there is no physical ancestor, returns nil
+	def self.find_physical_ancestor(item)
+		if item.isPhysicalFile
+			return item
+		else
+			parent = item.getParent
+			if !parent.nil?
+				find_physical_ancestor(parent)
+			else
+				return nil
+			end
+		end
+	end
+	
+	# Iterates a collection of items and checks if the item has a URI
+	# If not, searches for closest physical ancestor
+	# Returns an array of unique items
+	def self.get_physical_items(items)
+		item_hash = Hash.new
+		
+		items.each do |item|
+			if !item.getUri.nil?
+				item_hash[item.getGuid] = item
+			else
+				physical_ancestor = find_physical_ancestor(item)
+				if !physical_ancestor.nil?
+					item_hash[physical_ancestor.getGuid] = physical_ancestor
+				end
+			end
+		end
+		
+		return item_hash.values
+	end
 end
