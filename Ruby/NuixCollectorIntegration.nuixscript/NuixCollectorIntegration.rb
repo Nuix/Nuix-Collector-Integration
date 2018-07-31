@@ -45,7 +45,7 @@ main_tab.appendOpenFileChooser("collector_exe","Collector Executable","Collector
 main_tab.getControl("collector_exe").setPath("C:\\Program Files (x86)\\Nuix\\Nuix Collector\\Modules\\Nuix Collector.exe")
 main_tab.appendOpenFileChooser("job_template_file","Collector Job Template","Collector Job Template XML","xml")
 main_tab.getControl("job_template_file").setPath(File.join(script_directory,"CollectorJobTemplate.xml").gsub(/\//,"\\"))
-main_tab.appendCheckBox("run_collector_job","Run Job in Collector Once Generated",true)
+main_tab.appendCheckBox("run_collector_job","Run Job in Collector Once Generated",false)
 main_tab.appendTextArea("scope_query","Scope","flag:physical_file")
 
 #=================#
@@ -443,8 +443,12 @@ if dialog.getDialogResult == true
 
 				# Find the items
 				pd.logMessage("\tScope Query: #{scope_query}")
-				pd.setSubStatusAndLogIt("\tLocating items...")
+				pd.setSubStatusAndLogIt("\tSearching for items...")
 				items = nuix_case.searchUnsorted(scope_query)
+				pd.logMessage("\tSearch returned #{items.size} items")
+				
+				pd.setSubStatusAndLogIt("\tLocating items...")
+				items = Helpers.get_physical_items(items)
 				pd.logMessage("\tLocated #{items.size} items")
 
 				missing_files = []
