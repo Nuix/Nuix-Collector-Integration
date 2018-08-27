@@ -209,49 +209,63 @@ file_list_tab.appendCheckBox("create_file_list_as_text","Create File List as Tex
 # Helper method to determine if we're running as admin
 # https://stackoverflow.com/questions/560366/detect-if-running-with-administrator-privileges-under-windows-xp
 def running_elevated?
-	whoami = `whoami /groups` rescue nil
+	puts "Checking current process elevated status..."
+	whoami = run("whoami /groups",false,"C:\\",false)
 	if whoami =~ /S-1-16-12288/
-		true
+		return true
 	else
-		admin = `net localgroup administrators | find "%USERNAME%"` rescue ""
-		admin.empty? ? false : true
+		result = run("net localgroup administrators",false,"C:\\",false)
+		require 'etc'
+		user_name = Etc.getlogin
+		return true if result =~ /#{user_name}/
 	end
+	return false
 end
 
 # Convenience method for running a command string in the OS
 #
-# @param command [String] Command string to execute
-# @param use_shell [Boolean] When true, will pipe command through CMD /S /C to enable shell features
-# @param working_dir [String] The working directory of the subprocess
-def run(command,use_shell=true,working_dir)
-  # Necessary if command take advantage of any shell features such as
-  # IO piping
-  if use_shell
-    command = "cmd /S /C \"#{command}\""
-  end
+# @param command [String] Command string to execute, required
+# @param use_shell [Boolean] When true, will pipe command through CMD /S /C to enable shell features, default is true if not provided
+# @param working_dir [String] The working directory of the subprocess, "C:\" is the default if not provided
+# @param forward_to_standard_out [Boolean] When true (default) then output from command forwarded to standard out via puts
+def run(command,use_shell=true,working_dir="C:\\",forward_to_standard_out=true)
+	if command.strip.empty?
+		raise "No command provided to run()"
+	end
 
-  begin
-    puts "Executing: #{command}"
-    p = Runtime.getRuntime.exec(command,[].to_java(:string),java.io.File.new(working_dir))
-    
-      # Read error stream
-    std_err_reader = BufferedReader.new(InputStreamReader.new(p.getErrorStream))
-    while ((line = std_err_reader.readLine()).nil? == false)
-      puts line
-    end
-    
-    p.waitFor
-    puts "Execution completed:"
-    reader = BufferedReader.new(InputStreamReader.new(p.getInputStream))
-    while ((line = reader.readLine()).nil? == false)
-      puts line
-    end
-  rescue Exception => e
-    puts e.message
-    puts e.backtrace.inspect
-  ensure
-    p.destroy
-  end
+	# Necessary if command take advantage of any shell features such as
+	# IO piping
+	if use_shell
+		command = "cmd /S /C \"#{command}\""
+	end
+
+	output = []
+	p = nil
+
+	begin
+		puts "Executing: #{command}"
+		p = Runtime.getRuntime.exec(command,[].to_java(:string),java.io.File.new(working_dir))
+
+		# Read error stream
+		std_err_reader = BufferedReader.new(InputStreamReader.new(p.getErrorStream))
+		while ((line = std_err_reader.readLine()).nil? == false)
+			puts line if forward_to_standard_out
+		end
+
+		p.waitFor
+		puts "Execution completed:"
+		reader = BufferedReader.new(InputStreamReader.new(p.getInputStream))
+		while ((line = reader.readLine()).nil? == false)
+			puts line if forward_to_standard_out
+			output << "#{line}"
+		end
+	rescue Exception => e
+		puts e.message
+		puts e.backtrace.inspect
+	ensure
+		p.destroy if !p.nil?
+	end
+	return output.join("\n")
 end
 
 # Define validations which must pass before script will run
