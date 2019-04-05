@@ -8,7 +8,6 @@ require File.join(script_directory,"Nx.jar")
 java_import "com.nuix.nx.NuixConnection"
 java_import "com.nuix.nx.LookAndFeelHelper"
 java_import "com.nuix.nx.dialogs.ChoiceDialog"
-java_import "com.nuix.nx.dialogs.CustomDialog"
 java_import "com.nuix.nx.dialogs.TabbedCustomDialog"
 java_import "com.nuix.nx.dialogs.CommonDialogs"
 java_import "com.nuix.nx.dialogs.ProgressDialog"
@@ -207,17 +206,15 @@ file_list_tab.appendSpinner("entry_limit","Limit Entries per File List",10000,10
 file_list_tab.appendCheckBox("create_file_list_as_text","Create File List as Text",false)
 
 # Helper method to determine if we're running as admin
-# https://stackoverflow.com/questions/560366/detect-if-running-with-administrator-privileges-under-windows-xp
+# https://stackoverflow.com/questions/4350356/detect-if-java-application-was-run-as-a-windows-admin
 def running_elevated?
 	puts "Checking current process elevated status..."
-	whoami = run("whoami /groups",false,"C:\\",false)
-	if whoami =~ /S-1-16-12288/
-		return true
-	else
-		result = run("net localgroup administrators",false,"C:\\",false)
-		require 'etc'
-		user_name = Etc.getlogin
-		return true if result =~ /#{user_name}/
+	groups = com.sun.security.auth.module.NTSystem().new.getGroupIDs
+	groups.each do |group|
+		if group.strip == "S-1-5-32-544"
+			puts "User found to be member of Administrators group"
+			return true
+		end
 	end
 	return false
 end
@@ -253,7 +250,7 @@ def run(command,use_shell=true,working_dir="C:\\",forward_to_standard_out=true)
 		end
 
 		p.waitFor
-		puts "Execution completed:"
+		puts "Execution completed"
 		reader = BufferedReader.new(InputStreamReader.new(p.getInputStream))
 		while ((line = reader.readLine()).nil? == false)
 			puts line if forward_to_standard_out
@@ -283,12 +280,14 @@ dialog.validateBeforeClosing do |values|
 	end
 
 	# Check collector executable path
-	if values["collector_exe"].strip.empty?
-		CommonDialogs.showWarning("Please provide a value for 'Collector Executable'")
-		next false
-	elsif !java.io.File.new(values["collector_exe"]).exists
-		CommonDialogs.showWarning("Value provided for 'Collector Executable' does not point to a valid file")
-		next false
+	if values["run_collector_job"]
+		if values["collector_exe"].strip.empty?
+			CommonDialogs.showWarning("Please provide a value for 'Collector Executable'")
+			next false
+		elsif !java.io.File.new(values["collector_exe"]).exists
+			CommonDialogs.showWarning("Value provided for 'Collector Executable' does not point to a valid file")
+			next false
+		end
 	end
 
 	# Make sure we have a job template file to work with
