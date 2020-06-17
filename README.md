@@ -90,7 +90,7 @@ After a file is deleted, the file can often be undeleted using various undelete 
 
 # Template File
 
-The generated XML job file is based on a user provided template file.  A good default is included with the script (`DefensibleForensicDeletionTemplate.xml`).  The template XML file is rendered to a final version by replacing certain placeholders within the template file.  Full documentation for the Nuix Collector job file format can be found here: [Nuix Collector and ECC JobFile Reference Guide v8.6pdf](https://download.nuix.com/system/files/Nuix%20Collector%20and%20ECC%20JobFile%20Reference%20Guide%20v8.6.pdf).
+The generated XML job file is based on a user provided template file.  A good default is included with the script (`DefensibleForensicDeletionTemplate.xml`).  The template XML file is rendered to a final version by replacing certain placeholders within the template file.  Full documentation for the Nuix Collector job file format can be found here: [Nuix Collector and ECC JobFile Reference Guide v8.6](https://download.nuix.com/system/files/Nuix%20Collector%20and%20ECC%20JobFile%20Reference%20Guide%20v8.6.pdf).
 
 | Template Placeholder | Replacement Value |
 | -------------------- | ----------------- |
